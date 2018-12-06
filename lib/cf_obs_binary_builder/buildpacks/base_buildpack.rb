@@ -45,6 +45,11 @@ class CfObsBinaryBuilder::BaseBuildpack
     system("tar -xf v#{version}.tar.gz")
 
     if File.file?(File.join(tarball_dir,'go.mod'))
+
+      if !system("go version | grep -q 1.11")
+        raise "Required go 1.11 to bundle vendored dependencies"
+      end
+
       puts "Buildpack contains go.mod. Generating vendor/ and bundling buildpack-packager"
 
       # We have to fetch buildpack-packager as
